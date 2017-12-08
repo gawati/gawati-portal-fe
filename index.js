@@ -5,7 +5,8 @@ const app = express();
 
 //app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.use('/gwp', routes)
+app.use('/gwp', routes);
+app.use('/gwp/full-filter-cache', express.static(path.join('portal-cache', 'filter-cache.json')));
 
 const cron = require('./cron');
 

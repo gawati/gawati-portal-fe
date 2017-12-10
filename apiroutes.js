@@ -38,10 +38,11 @@ function filterByName(filterValue) {
 
 var router = express.Router();
 
+  /*
 router.get(
   '/filter-cache', 
   filtercache.routeFilterCache
-  /*
+
   function routeFilterCache(req, res, next) {
     fs.readFile(
         filtercache.getCacheFile(), 
@@ -77,9 +78,9 @@ router.get(
       }
     );
   }
-  */
+ 
 );
-
+ */
 
 
 module.exports = router;

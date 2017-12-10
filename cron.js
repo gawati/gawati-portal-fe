@@ -16,15 +16,15 @@ winston.level = process.env.LOG_LEVEL || 'error' ;
 /**
  * 
  */
-const CRON_SIGNATURE =  '10 * * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_FILTER_CACHE_CRON_SIGNATURE =  '12 * * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
- * Runs a cron job to retreive the schedule as per CRON_SIGNATURE
+ * Runs a cron job to retreive the filter from the Data server as per CRON_FILTER_CACHE_CRON_SIGNATURE
  * This is a server side request
  */
 var filterCacheCron = schedule.scheduleJob(
-    CRON_SIGNATURE,
-    filtercache.getFilter
+    CRON_FILTER_CACHE_CRON_SIGNATURE,
+    filtercache.fetchFilter
     /*
     function getFilter() {
         console.log(" calling filterCacheCron ");
@@ -40,6 +40,15 @@ var filterCacheCron = schedule.scheduleJob(
     */
 );
 
+const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '18 * * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+
+/**
+ * Runs a cron job to retreive the schedule as per CRON_SIGNATURE
+ * This is a server side request
+ */
+var shortenFilterCacheCron = schedule.scheduleJob(
+    CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE,
+    filtercache.fetchShortFilterCache
+);
 
 
-exports.filterCacheCron = filterCacheCron;

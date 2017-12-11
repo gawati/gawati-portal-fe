@@ -8,10 +8,26 @@ const appconstants = require('./constants');
 
 const app = express();
 
-//app.use(express.static(path.join(__dirname, 'client/build')));
+/**
+ * Use the WITH_CRON=1 environment variables to start cron within this node process
+ */
+if (process.env.WITH_CRON === '1' ) {
+    const cron = require('./cron');
+    console.log(" Starting Server with cron ");
+} else {
+    console.log(" Starting Server without cron");
+}
 
+/**
+ * Use the WITH_CLIENT=1 environment variables to start with the static client
+ */
+if (process.env.WITH_CLIENT === '1') {
+    console.log(" Deploying Client...on /v2 ");
+    app.use('/v2', express.static(path.join(__dirname, 'client/build')))
+}
+
+console.log(" Deploying Services... ");
 app.use('/gwp', routes);
-
 app.use(
     '/gwp/full-filter-cache', 
     express.static(
@@ -21,7 +37,6 @@ app.use(
         )
     )
 );
-
 app.use(
     '/gwp/short-filter-cache', 
     express.static(

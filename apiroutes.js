@@ -11,31 +11,6 @@ const filtercache = require('./filtercache');
  */
 winston.level = process.env.LOG_LEVEL || 'error' ;
 
-
-function remapFilter(value, key) {
-  var filterMap = pick(value, ['name', 'label']);
-  filterMap[key] = value[key].slice(0,5);
-  return filterMap;
-}
-
-function filterByName(filterValue) {
-  switch(filterValue.name) {
-    case "countries":
-        return remapFilter(filterValue, 'country');
-      break;
-    case "langs":
-        return remapFilter(filterValue, 'lang');
-      break;
-    case "years":
-        return remapFilter(filterValue, 'year');
-      break;
-    case "keywords":
-        return remapFilter(filterValue, 'keyword');
-      break;
-  }
-}
-
-
 var router = express.Router();
 
   /*

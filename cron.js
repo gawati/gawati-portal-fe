@@ -1,5 +1,11 @@
 /**
  * This module exposes the cron processes run on the server
+ * It can be started with a standalone node instance:
+ * 
+ * .. code-block::bash
+ *      node cron.js
+ * 
+ * or with the main service by passing WITH_CRON=1 as a environment prefix
  */
 const schedule = require('node-schedule');
 const path = require('path');
@@ -16,7 +22,7 @@ winston.level = process.env.LOG_LEVEL || 'error' ;
 /**
  * 
  */
-const CRON_FILTER_CACHE_CRON_SIGNATURE =  '12 * * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_FILTER_CACHE_CRON_SIGNATURE =   '*/7 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
  * Runs a cron job to retreive the filter from the Data server as per CRON_FILTER_CACHE_CRON_SIGNATURE
@@ -25,25 +31,12 @@ const CRON_FILTER_CACHE_CRON_SIGNATURE =  '12 * * * * *' ; // '*/5 * * * *'; // 
 var filterCacheCron = schedule.scheduleJob(
     CRON_FILTER_CACHE_CRON_SIGNATURE,
     filtercache.fetchFilter
-    /*
-    function getFilter() {
-        console.log(" calling filterCacheCron ");
-        axios.get(API_FILTER_CACHE)
-            .then(getFilterResponseAndWriteIt)
-            .catch(function scheduleJobError(error) {
-                console.log(" scheduleJobError ", error);
-                if (error) {
-                    winston.log('error', 'error while retrieving filter response', error);
-                }
-            });
-    }
-    */
 );
 
-const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '18 * * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/9 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
- * Runs a cron job to retreive the schedule as per CRON_SIGNATURE
+ * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
  * This is a server side request
  */
 var shortenFilterCacheCron = schedule.scheduleJob(

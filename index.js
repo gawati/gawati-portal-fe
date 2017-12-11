@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const routes = require('./apiroutes');
 const appconstants = require('./constants');
-const cron = require('./cron');
+
+// uncomment the below if you want to run cron as part of the web service process
+//const cron = require('./cron');
 
 const app = express();
 

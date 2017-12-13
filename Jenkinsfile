@@ -7,15 +7,20 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                script {
-                    def packageFile = readJSON file: 'package.json'
-                }
                 sh 'pwd'
                 sh 'npm --version'
                 sh 'node -v'
                 sh 'npm install'
-                sh "echo Package version is ${packageFile.version} $packageFile.version"
-                sh "tar -cvjf /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.tbz ."
+                script {
+                    def packageFile = readJSON file: 'package.json'
+                    version = packageFile.version
+                    sh "set"
+                    sh "echo Package version is $version"
+                    sh "echo Package version is ${version}"
+                    sh "echo Package version is $packageFile.version"
+                    sh "echo Package version is ${packageFile.version}"
+                    sh "tar -cvjf /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.tbz ."
+                }
             }
         }
        stage('Clean') {

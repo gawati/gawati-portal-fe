@@ -22,7 +22,7 @@ pipeline {
                 script {
                     def packageFile = readJSON file: 'package.json'
                     sh "tar -cvjf /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.tbz ."
-                    sh "zip -r /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.zip ."
+                    sh "zip -r - . > /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.zip"
                 }
             }
         }

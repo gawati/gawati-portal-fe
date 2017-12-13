@@ -18,9 +18,11 @@ pipeline {
         }
         stage('Upload') {
             steps {
+                sh 'rm -rf .gitignore .git Jenkinsfile'
                 script {
                     def packageFile = readJSON file: 'package.json'
                     sh "tar -cvjf /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.tbz ."
+                    sh "zip -r /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.zip ."
                 }
             }
         }

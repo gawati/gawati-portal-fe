@@ -10,6 +10,7 @@ pipeline {
                 script {
                     def packageFile = readJSON file: 'package.json'
                 }
+                sh 'pwd'
                 sh 'npm --version'
                 sh 'node -v'
                 sh 'npm install'

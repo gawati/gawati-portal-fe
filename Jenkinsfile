@@ -13,12 +13,6 @@ pipeline {
                 sh 'npm install'
                 script {
                     def packageFile = readJSON file: 'package.json'
-                    version = packageFile.version
-                    sh "set"
-                    sh "echo Package version is $version"
-                    sh "echo Package version is ${version}"
-                    sh "echo Package version is $packageFile.version"
-                    sh "echo Package version is ${packageFile.version}"
                     sh "tar -cvjf /var/www/html/dl.gawati.org/dev/portal-server-${packageFile.version}.tbz ."
                 }
             }

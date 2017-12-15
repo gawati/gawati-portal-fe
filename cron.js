@@ -45,7 +45,7 @@ var shortenFilterCacheCron = schedule.scheduleJob(
 );
 
 
-const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/6 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/1 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
  * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE

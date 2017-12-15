@@ -46,5 +46,14 @@ app.use(
         )
     )
 );
+app.use(
+    '/gwp/smart-filter-cache', 
+    express.static(
+        path.join(
+            appconstants.FOLDER_CACHE, 
+            appconstants.FILE_SMART_FILTER_CACHE
+        )
+    )
+);
 
 module.exports = app;

@@ -119,7 +119,6 @@ function processRouteFilterCache(error, data) {
         }  
       );
       console.log(" success: created short filter cache");
-      //res.json({'timestamp': filterObj.timestamp, 'filter': shortFilter});      
     }
 }
 
@@ -192,7 +191,6 @@ function processRouteSmartFilterCache(error, data) {
         }  
       );
       console.log(" success: created smart filter cache");
-      //res.json({'timestamp': filterObj.timestamp, 'filter': shortFilter});      
     }
 }
 
@@ -210,7 +208,7 @@ function smartFilterByName(filterValue) {
 
 function remapKeyWords(filterValue) {
     const KW = 'keyword';
-    const KW_THRESHOLD = 10; 
+    const KW_THRESHOLD = 50; 
     var filterMap = pick(filterValue, ['name', 'label']);
     if (filterValue[KW].length <= KW_THRESHOLD) {
         filterMap[KW] = filterValue[KW];

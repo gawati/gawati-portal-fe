@@ -33,7 +33,7 @@ var filterCacheCron = schedule.scheduleJob(
     filtercache.fetchFilter
 );
 
-const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/9 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/8 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
  * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
@@ -44,4 +44,15 @@ var shortenFilterCacheCron = schedule.scheduleJob(
     filtercache.fetchShortFilterCache
 );
 
+
+const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/6 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+
+/**
+ * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
+ * This is a server side request
+ */
+var shortenFilterCacheCron = schedule.scheduleJob(
+    CRON_SMART_FILTER_CACHE_CRON_SIGNATURE,
+    filtercache.fetchSmartFilterCache
+);
 

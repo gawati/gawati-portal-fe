@@ -269,8 +269,8 @@ function getSmartCacheFile() {
     return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_SMART_FILTER_CACHE);
 }
 
-//module.exports.getCacheFile = getCacheFile;
-//module.exports.getShortCacheFile = getShortCacheFile;
+module.exports.getCacheFile = getCacheFile;
+module.exports.getShortCacheFile = getShortCacheFile;
 module.exports.fetchFilter = fetchFilter;
 //module.exports.getFilterResponseAndWriteIt = getFilterResponseAndWriteIt;
 module.exports.fetchShortFilterCache = fetchShortFilterCache;

@@ -27,7 +27,9 @@ if (process.env.WITH_CLIENT === '1') {
 }
 
 console.log(" Deploying Services... ");
+
 app.use('/gwp', routes);
+
 app.use(
     '/gwp/full-filter-cache', 
     express.static(
@@ -37,6 +39,7 @@ app.use(
         )
     )
 );
+
 app.use(
     '/gwp/short-filter-cache', 
     express.static(
@@ -46,6 +49,7 @@ app.use(
         )
     )
 );
+
 app.use(
     '/gwp/smart-filter-cache', 
     express.static(

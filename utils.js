@@ -5,6 +5,25 @@ function randomNItemsFromArray(array, n) {
     return selected ;
 }
 
+
+/**
+ * Safely close a file handle
+ * @param {object} fs 
+ * @param {object} fd 
+ */
+function fsClose(fs, fd) {
+    fs.close(fd, function(error) {
+        if (error) {
+            winston.log('error', 'closing error ' + error.message);
+            return;
+        } else {
+            winston.log('File was closed !');
+        }
+    });
+}
+
+
 module.exports = {
-    randomNItemsFromArray: randomNItemsFromArray
+    randomNItemsFromArray: randomNItemsFromArray,
+    fsClose: fsClose
 };

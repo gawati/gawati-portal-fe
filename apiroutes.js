@@ -38,7 +38,8 @@ function findKeyword(req, res, next) {
     const keyword = req.query.kw.toLowerCase() ;
     fs.openAsync(filtercache.getCacheFile(), 'r').then(
       function(fd) {
-        fs.readFileAsync(filtercache.getCacheFile(), 'utf8').then(
+        fs.readFileAsync(filtercache.getCacheFile(), 'utf8')
+          .then(
           function(contents) {
             let filterObj = JSON.parse(contents);
             let kwObjs = filterObj.filter.find(
@@ -47,13 +48,17 @@ function findKeyword(req, res, next) {
             let matches = kwObjs.keyword.filter(
                kwObj => kwObj.showAs.toLowerCase().indexOf(keyword) >= 0 
             );
+            apputils.fsClose(fs, fd);
             res.json({matches: matches});
           }
-        )
-      }
-    );
+        ).catch(
+          function (error) {
+              winston.log(" error in findKeyword " + error.message);
+          }
+        );
+    }
+  );
 }
-
 
 
 

@@ -52,6 +52,7 @@ function responseFetchFilter(response) {
 }
 
 
+
 /**
  * Reads the full cache and generates a short-cache file
  */
@@ -61,13 +62,14 @@ function fetchShortFilterCache() {
         if (error) {
             if (error.code === 'ENOENT') {
                 winston.log('error', 'file does not exist', error);
-                return;
             } else {
                 winston.log('error', 'error while opening file ', error);
-                return;
             }
+            apputils.fsClose(fs, fd);
+            return;
         }
         readFullCacheFileAndProcess();
+        apputils.fsClose(fs, fd);
     });
 }
 
@@ -137,8 +139,11 @@ function fetchSmartFilterCache() {
                 winston.log('error', 'error while opening file ', error);
                 return;
             }
+            apputils.fsClose(fs, fd);
+            return;
         }
         readFullCacheFileAndSmartProcess();
+        apputils.fsClose(fs, fd);
     });
 }
 

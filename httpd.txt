@@ -23,7 +23,7 @@
 </Location>
 
 
-<Location "/gw/service/keyword">
+<Location "/gw/service/keyword/">
   AddType text/cache-manifest .appcache
   ProxyPass  "http://localhost:9001/gwp/keyword"
   ProxyPassReverse "http://localhost:9001/gwp/keyword"

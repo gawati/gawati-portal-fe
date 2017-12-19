@@ -19,9 +19,10 @@ var router = express.Router();
 
 /**
  * Accepts a Keyword URL parameter and returns matches for it from the full filter cache
+ * /keyword?kw=Acco 
  */
 router.get(
-  '/keyword/:kw',
+  '/keyword',
   findKeyword
 );
 
@@ -34,7 +35,7 @@ router.get(
  * @param {object} next 
  */
 function findKeyword(req, res, next) {
-    const keyword = req.params.kw.toLowerCase() ;
+    const keyword = req.query.kw.toLowerCase() ;
     fs.openAsync(filtercache.getCacheFile(), 'r').then(
       function(fd) {
         fs.readFileAsync(filtercache.getCacheFile(), 'utf8').then(

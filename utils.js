@@ -1,3 +1,4 @@
+const winston = require('winston');
 
 function randomNItemsFromArray(array, n) {
     var shuffled = array.sort(function(){return .5 - Math.random()});

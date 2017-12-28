@@ -3,11 +3,12 @@ const path = require('path');
 
 const winston = require('winston');
 const pick = require('lodash.pick');
+const Promise = require('bluebird');
 
 const apputils = require('./utils');
 const filtercache = require('./filtercache');
+//const filterbuilder = require('./filterbuilder');
 
-const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 
 /**
@@ -16,6 +17,29 @@ const fs = Promise.promisifyAll(require('fs'));
 winston.level = process.env.LOG_LEVEL || 'error' ;
 
 var router = express.Router();
+
+/**
+ * Utility function to allow wrapping every call in the express route with async
+ * @param {function} fn 
+ */
+const asyncUtil = fn =>
+        (req, res, next) =>
+          fn(req, res, next)
+            .catch(next);
+ 
+            /*
+router.get(
+  '/searchFilter',
+  asyncUtil( async (req, res, next) => {
+    const filterObj = filterbuilder.searchFilter(req, res, next);
+    const data = await filterbuilder.searchFilterQuery(filterObj);
+    res.json(data)
+  }
+  )
+);
+
+*/
+
 
 /**
  * Accepts a Keyword URL parameter and returns matches for it from the full filter cache

@@ -60,4 +60,11 @@ app.use(
     )
 );
 
+
+app.use( function (err, req, res, next) {
+    console.log (" ERROR LOGGED");
+    res.status(500);
+    res.render('error', { error: err });
+});
+
 module.exports = app;

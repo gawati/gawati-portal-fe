@@ -26,6 +26,11 @@ const getContentOutputFile = (pageName, lang) => path.join(
         `${pageName}_${lang}.html`
     );
 
+const getErrorFile = (pageName, lang) => path.join(
+        appconstants.CONTENT_CACHE, "error",
+        `${pageName}_${lang}.html`
+);
+
 /**
  * Reads pages.json and generates static content for each of the listed content pages
  * for different languages.
@@ -112,7 +117,7 @@ const pageCleanup = (pageHtml) => {
  * @param {string} lang 
  */
 function serveFile(req, res, next, page, lang) {
-    let cmsPage = getContentOutputFile(page, lang);
+    let cmsPage = page.startsWith('_error') ? getErrorFile(page, lang) : getContentOutputFile(page, lang);
     fs.readFileAsync(cmsPage, 'utf8')
         .then(
             (content) => {

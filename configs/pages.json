@@ -1,0 +1,58 @@
+{
+    "pages":[
+        {
+            "name": "faq",
+            "content": [
+                {
+                "lang": "en",
+                "url": "https://aifportal.wordpress.com/faq/"
+                }
+            ]
+        },
+        {
+            "name": "about_us",
+            "content": [
+                {   
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/about-us/"
+                }
+            ]
+        },
+        {
+            "name": "policies",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/policies/"
+                }
+            ]
+        },
+        {
+            "name": "privacy_policy",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/privacy-policy/"
+                }
+            ]
+        },
+        {
+            "name": "who_we_are",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/who-we-are/"
+                }
+            ]
+        },
+        {
+            "name": "what_we_do",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/what-we-do/"
+                }
+            ]
+        }
+    ]
+}

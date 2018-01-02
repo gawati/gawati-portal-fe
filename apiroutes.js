@@ -7,6 +7,8 @@ const Promise = require('bluebird');
 
 const apputils = require('./utils');
 const filtercache = require('./filtercache');
+const cmscontent = require('./cmscontent');
+
 //const filterbuilder = require('./filterbuilder');
 
 const fs = Promise.promisifyAll(require('fs'));
@@ -39,6 +41,21 @@ router.get(
 );
 
 */
+
+router.get(
+  '/content',
+   (req, res, next) => {
+    const pageName = req.query.page;
+    const lang = req.query.lang;
+    const html = cmscontent.serveFile(
+      req, 
+      res, 
+      next, 
+      pageName,
+      lang
+    );
+  }
+);
 
 
 /**
@@ -83,6 +100,8 @@ function findKeyword(req, res, next) {
     }
   );
 }
+
+
 
 
 

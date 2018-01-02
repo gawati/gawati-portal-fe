@@ -15,6 +15,8 @@ const winston = require('winston');
 
 
 const filtercache = require('./filtercache');
+const cmscontent = require('./cmscontent');
+
 /**
  * Log level
  */
@@ -51,8 +53,16 @@ const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/1 * * * *' ; // '*/5 * * * *'
  * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
  * This is a server side request
  */
-var shortenFilterCacheCron = schedule.scheduleJob(
+var smartFilterCacheCron = schedule.scheduleJob(
     CRON_SMART_FILTER_CACHE_CRON_SIGNATURE,
     filtercache.fetchSmartFilterCache
 );
 
+const CRON_CONTENT_PAGE_CRON_SIGNATURE = '0 0 12 * * *';
+
+var cmsCacheCron = schedule.scheduleJob(
+    CRON_CONTENT_PAGE_CRON_SIGNATURE,
+    cmscontent.processContentFiles
+);
+// call it the first time when the cron is started
+cmscontent.processContentFiles();

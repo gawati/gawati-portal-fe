@@ -53,6 +53,24 @@
                     "url": "https://aifportal.wordpress.com/what-we-do/"
                 }
             ]
-        }
+        },
+        {
+            "name": "copyright",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/copyright/"
+                }
+            ]
+        },
+        {
+            "name": "terms_of_service",
+            "content": [
+                {
+                    "lang": "en",
+                    "url": "https://aifportal.wordpress.com/terms-of-service/"
+                }
+            ]
+        }        
     ]
 }

@@ -121,8 +121,10 @@ function serveFile(req, res, next, page, lang) {
     fs.readFileAsync(cmsPage, 'utf8')
         .then(
             (content) => {
+                const domjs = new JSDOM(`${content}`);
+                const foundElem = domjs.window.document.querySelector("div.aif-content-page");
                 res.set('Content-Type', 'text/html');
-                res.send(content);
+                res.send(foundElem.outerHTML);
             }
         ).catch( 
             (err) => {
@@ -136,7 +138,7 @@ function serveFile(req, res, next, page, lang) {
 
 // call this on module load to initialize the pages
 // called subsequently on daily cron
-
+processContentFiles();
 
 module.exports.serveFile = serveFile;
 module.exports.processContentFiles = processContentFiles;

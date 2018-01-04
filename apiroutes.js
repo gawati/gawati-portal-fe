@@ -4,12 +4,11 @@ const path = require('path');
 const winston = require('winston');
 const pick = require('lodash.pick');
 const Promise = require('bluebird');
+const Fuse = require('fuse.js');
 
 const apputils = require('./utils');
 const filtercache = require('./filtercache');
 const cmscontent = require('./cmscontent');
-
-//const filterbuilder = require('./filterbuilder');
 
 const fs = Promise.promisifyAll(require('fs'));
 
@@ -67,6 +66,25 @@ router.get(
   findKeyword
 );
 
+const fuseOptions = {
+  shouldSort: true,
+  //includeScore: true,
+  threshold: 0.6,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 2,
+  keys: [
+    "showAs"
+  ]
+};
+
+async function fuseSearch(list, keyword) {
+  let fuse = new Fuse(list, fuseOptions);
+  let results = fuse.search(keyword);
+  return results.slice(0, 50);
+}
+
 /**
  * Finds keywords using the full filter cache. 
  * NOTE: this makes use of the Promise form of the fs module.
@@ -86,11 +104,22 @@ function findKeyword(req, res, next) {
             let kwObjs = filterObj.filter.find(
               filter => filter.name === 'keywords'
             );
+            apputils.fsClose(fs, fd);
+            fuseSearch(kwObjs.keyword, keyword).then(
+              (results) =>  res.json({matches: results})
+            );
+            /*
+            fuzzysort.goAsync(keyword, kwObjs.keyword, {keys: ['showAs']})
+              .then(results => {
+                res.json({matches: results});
+              });
+              */
+            /*
             let matches = kwObjs.keyword.filter(
                kwObj => kwObj.showAs.toLowerCase().indexOf(keyword) >= 0 
             );
-            apputils.fsClose(fs, fd);
-            res.json({matches: matches});
+            */
+            //res.json({matches: matches});
           }
         ).catch(
           function (error) {

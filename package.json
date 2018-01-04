@@ -13,6 +13,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "fuse.js": "^3.2.0",
     "jsdom": "^11.5.1",
     "lodash.pick": "^4.4.0",
     "node-readability": "^3.0.0",

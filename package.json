@@ -1,10 +1,12 @@
 {
   "name": "gawati-portal-server",
   "version": "1.0.7",
+  "gawati-version": "1.0.7",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "cron": "node cron.js"
+    "cron": "node cron.js",
+    "vars": "env | grep npm_package_ | grep -v npm_lifecycle_script"
   },
   "dependencies": {
     "axios": "^0.17.1",

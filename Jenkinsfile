@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+//  define {
+//      def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
+//      def STATUS_MAP = ['SUCCESS': 'success', 'FAILURE': 'failed', 'UNSTABLE': 'failed', 'ABORTED': 'failed']
+//  }
+
     environment {
         // CI="false"
         DLD="/var/www/html/dl.gawati.org/dev"
@@ -26,13 +31,12 @@ pipeline {
             steps {
                 sh 'rm -rf .gitignore .git Jenkinsfile'
                 script {
-                    def packageFile = readJSON file: 'package.json'
-                    sh "tar -cvjf $DLD/$PKF-${packageFile.version}.tbz ."
-                    sh "zip -r - . > $DLD/$PKF-${packageFile.version}.zip"
-                    sh "[ -L $DLD/$PKF-latest.zip ] && rm -f $DLD/$PKF-latest.zip ; exit 0"
-                    sh "[ -e $DLD/$PKF-latest.zip ] || ln -s $PKF-${packageFile.version}.zip $DLD/$PKF-latest.zip"
-                    sh "[ -L $DLD/$PKF-latest.tbz ] && rm -f $DLD/$PKF-latest.tbz ; exit 0"
-                    sh "[ -e $DLD/$PKF-latest.tbz ] || ln -s $PKF-${packageFile.version}.tbz $DLD/$PKF-latest.tbz"
+                    sh '''
+wget -qO- http://dl.gawati.org/dev/jenkinslib-latest.tbz | tar -xvjf -
+. ./jenkinslib.sh
+PkgPack
+PkgLinkAll
+'''
                 }
             }
         }
@@ -41,5 +45,18 @@ pipeline {
           cleanWs(cleanWhenAborted: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, cleanupMatrixParent: true, deleteDirs: true)
         }
        }
+    }
+
+    post {
+        always {
+//          slackSend (color: COLOR_MAP[currentBuild.currentResult], message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            slackSend (message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend (channel: '#failure', message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        unstable {
+            slackSend (channel: '#failure', message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
     }
 }

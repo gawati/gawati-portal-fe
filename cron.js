@@ -66,3 +66,13 @@ var cmsCacheCron = schedule.scheduleJob(
 );
 // call it the first time when the cron is started
 cmscontent.processContentFiles();
+
+const  CRON_RECENT_DOCS_CRON_SIGNATURE = '*/3 * * * *';
+
+var recentDocsCron = schedule.scheduleJob(
+    CRON_RECENT_DOCS_CRON_SIGNATURE,
+    filtercache.fetchRecentDocs
+);
+
+filtercache.fetchRecentDocs();
+

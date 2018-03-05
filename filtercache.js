@@ -24,6 +24,50 @@ function fetchFilter() {
         );
 }
 
+function fetchRecentDocs() {
+    axios.get(appconstants.API_RECENT)
+    // call responseFetchFilter()
+    .then(
+        (response) => {
+            return responseFetch(response, getRecentCache());
+    })
+    .catch(
+        function scheduleJobError(error) {
+            console.log(" scheduleJobError ", error);
+            if (error) {
+                winston.log('error', 'error while retrieving filter response', error);
+            }
+        }
+    );    
+}
+
+/**
+ * Called by getFilter().
+ * Retrieves the filter response from the Data server and Writes it to the JSON file
+ * 
+ * @param {object} response 
+ */
+function responseFetch(response, cacheFile) {
+    let responseData = response.data; 
+    console.log(" responseFetchRecent ");
+    fs.writeFile(
+        cacheFile, 
+        JSON.stringify(responseData), 
+        'utf8',
+        function writeFileError(error) {
+            if (error) {
+                winston.log(
+                    'error', 
+                    'error while writing response to ' + cacheFile, 
+                    error
+                );
+            }
+        }  
+    );
+    console.log(" success: created cache " + cacheFile); 
+}
+
+
 
 /**
  * Called by getFilter().
@@ -265,6 +309,9 @@ function getCacheFile() {
     return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_FILTER_CACHE);
 }
 
+function getRecentCache() {
+    return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_RECENT_CACHE);
+}
 
 function getShortCacheFile() {
     return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_SHORT_FILTER_CACHE);
@@ -280,3 +327,4 @@ module.exports.fetchFilter = fetchFilter;
 //module.exports.getFilterResponseAndWriteIt = getFilterResponseAndWriteIt;
 module.exports.fetchShortFilterCache = fetchShortFilterCache;
 module.exports.fetchSmartFilterCache = fetchSmartFilterCache;
+module.exports.fetchRecentDocs = fetchRecentDocs;

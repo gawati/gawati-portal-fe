@@ -60,6 +60,16 @@ app.use(
     )
 );
 
+app.use(
+    '/gwp/recent-docs', 
+    express.static(
+        path.join(
+            appconstants.FOLDER_CACHE, 
+            appconstants.FILE_RECENT_CACHE
+        )
+    )
+);
+
 
 app.use( function (err, req, res, next) {
     console.log (" ERROR LOGGED");

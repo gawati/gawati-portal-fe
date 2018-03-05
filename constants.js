@@ -14,12 +14,14 @@ const CONFIG_CONTENT_PAGES = 'pages.json' ;
 const FILE_FILTER_CACHE = 'full-filter-cache.json' ;
 const FILE_SHORT_FILTER_CACHE = 'short-filter-cache.json';
 const FILE_SMART_FILTER_CACHE = 'smart-filter-cache.json';
+const FILE_RECENT_CACHE = 'recent-docs.json';
 
 const API_SERVER_BASE = () =>
     API_PROTOCOL + '://' + API_HOST + ":" + API_PORT + '/exist/restxq';
 
 
 const API_FILTER_CACHE =  API_SERVER_BASE() + '/gw/filter-cache/json' ;
+const API_RECENT = API_SERVER_BASE() + '/gw/recent/expressions/summary/json?count=4&from=1&to=4' ;
 const API_SEARCH_FILTER = API_SERVER_BASE() + '/gw/search/filter/json' ;
 
 module.exports = {
@@ -30,6 +32,8 @@ module.exports = {
     FILE_FILTER_CACHE: FILE_FILTER_CACHE,
     FILE_SHORT_FILTER_CACHE: FILE_SHORT_FILTER_CACHE,
     FILE_SMART_FILTER_CACHE: FILE_SMART_FILTER_CACHE,
+    FILE_RECENT_CACHE: FILE_RECENT_CACHE,
     API_FILTER_CACHE: API_FILTER_CACHE,
-    API_SEARCH_FILTER: API_SEARCH_FILTER
+    API_SEARCH_FILTER: API_SEARCH_FILTER,
+    API_RECENT: API_RECENT
 };

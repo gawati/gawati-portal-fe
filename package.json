@@ -9,17 +9,17 @@
     "vars": "env | grep npm_package_ | grep -v npm_lifecycle_script"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
+    "express": "~4.16.2",
     "fuse.js": "^3.2.0",
-    "jsdom": "^11.5.1",
+    "jsdom": "^11.6.2",
     "lodash.pick": "^4.4.0",
     "node-readability": "^3.0.0",
-    "node-schedule": "^1.2.5",
+    "node-schedule": "^1.3.0",
     "winston": "^2.4.0"
   }
 }

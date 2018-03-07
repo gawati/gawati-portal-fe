@@ -22,9 +22,9 @@ const cmscontent = require('./cmscontent');
  */
 winston.level = process.env.LOG_LEVEL || 'error' ;
 /**
- * 
+ *  Run every 7 minutes
  */
-const CRON_FILTER_CACHE_CRON_SIGNATURE =   '*/7 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_FILTER_CACHE_CRON_SIGNATURE =   '*/7 * * * *'; 
 
 /**
  * Runs a cron job to retreive the filter from the Data server as per CRON_FILTER_CACHE_CRON_SIGNATURE
@@ -35,7 +35,10 @@ var filterCacheCron = schedule.scheduleJob(
     filtercache.fetchFilter
 );
 
-const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/8 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+/*
+* Run every 8 minutes
+*/
+const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/8 * * * *' ; 
 
 /**
  * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
@@ -47,6 +50,9 @@ var shortenFilterCacheCron = schedule.scheduleJob(
 );
 
 
+/*
+* Run every 1 minute
+*/
 const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/1 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
@@ -58,6 +64,10 @@ var smartFilterCacheCron = schedule.scheduleJob(
     filtercache.fetchSmartFilterCache
 );
 
+/*
+* Run every 12 hours
+*/
+
 const CRON_CONTENT_PAGE_CRON_SIGNATURE = '0 0 12 * * *';
 
 var cmsCacheCron = schedule.scheduleJob(
@@ -66,6 +76,10 @@ var cmsCacheCron = schedule.scheduleJob(
 );
 // call it the first time when the cron is started
 cmscontent.processContentFiles();
+
+/*
+* Run every 3 minutes
+*/
 
 const  CRON_RECENT_DOCS_CRON_SIGNATURE = '*/3 * * * *';
 

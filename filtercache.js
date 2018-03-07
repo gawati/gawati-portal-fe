@@ -19,10 +19,57 @@ function fetchFilter() {
                 console.log(" scheduleJobError ", error);
                 if (error) {
                     winston.log('error', 'error while retrieving filter response', error);
+                    throw error;
                 }
             }
         );
 }
+
+function fetchRecentDocs() {
+    axios.get(appconstants.API_RECENT)
+    // call responseFetchFilter()
+    .then(
+        (response) => {
+            return responseFetch(response, getRecentCache());
+    })
+    .catch(
+        function scheduleJobError(error) {
+            console.log(" scheduleJobError ", error);
+            if (error) {
+                winston.log('error', 'error while retrieving filter response', error);
+                throw error;
+            }
+        }
+    );    
+}
+
+/**
+ * Called by getFilter().
+ * Retrieves the filter response from the Data server and Writes it to the JSON file
+ * 
+ * @param {object} response 
+ */
+function responseFetch(response, cacheFile) {
+    let responseData = response.data; 
+    console.log(" responseFetchRecent ");
+    fs.writeFile(
+        cacheFile, 
+        JSON.stringify(responseData), 
+        'utf8',
+        function writeFileError(error) {
+            if (error) {
+                winston.log(
+                    'error', 
+                    'error while writing response to ' + cacheFile, 
+                    error
+                );
+                throw error;
+            }
+        }  
+    );
+    console.log(" success: created cache " + cacheFile); 
+}
+
 
 
 /**
@@ -45,6 +92,7 @@ function responseFetchFilter(response) {
                     'error while writing filter response ', 
                     error
                 );
+                throw error;
             }
         }  
     );
@@ -66,6 +114,7 @@ function fetchShortFilterCache() {
                 winston.log('error', 'error while opening file ', error);
             }
             apputils.fsClose(fs, fd);
+            throw error;
             return;
         }
         readFullCacheFileAndProcess();
@@ -94,6 +143,7 @@ function readFullCacheFileAndProcess() {
 function processRouteFilterCache(error, data) {
     if (error) {
       winston.log('error', 'error while reading full filter cache', error);
+      throw error;
       return;
     } else {
         // filter the object
@@ -117,6 +167,7 @@ function processRouteFilterCache(error, data) {
                   'error while writing short filter response ', 
                   error
               );
+              throw error;
           }
         }  
       );
@@ -140,6 +191,7 @@ function fetchSmartFilterCache() {
                 return;
             }
             apputils.fsClose(fs, fd);
+            throw error;
             return;
         }
         readFullCacheFileAndSmartProcess();
@@ -169,6 +221,7 @@ function readFullCacheFileAndSmartProcess() {
 function processRouteSmartFilterCache(error, data) {
     if (error) {
       winston.log('error', 'error while reading smart filter cache', error);
+      throw error;
       return;
     } else {
         // filter the object
@@ -192,6 +245,7 @@ function processRouteSmartFilterCache(error, data) {
                   'error while writing short filter response ', 
                   error
               );
+              throw error;
           }
         }  
       );
@@ -265,6 +319,9 @@ function getCacheFile() {
     return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_FILTER_CACHE);
 }
 
+function getRecentCache() {
+    return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_RECENT_CACHE);
+}
 
 function getShortCacheFile() {
     return path.join(appconstants.FOLDER_CACHE, appconstants.FILE_SHORT_FILTER_CACHE);
@@ -280,3 +337,4 @@ module.exports.fetchFilter = fetchFilter;
 //module.exports.getFilterResponseAndWriteIt = getFilterResponseAndWriteIt;
 module.exports.fetchShortFilterCache = fetchShortFilterCache;
 module.exports.fetchSmartFilterCache = fetchSmartFilterCache;
+module.exports.fetchRecentDocs = fetchRecentDocs;

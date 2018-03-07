@@ -42,7 +42,8 @@ const processContentFiles = () => {
                 let objPages = JSON.parse(content);
                 return objPages;
             }            
-        ).then(
+        )
+        .then(
             (objPages) => {
                 // first add the name to each of the content object
                 // this will return an array within an array
@@ -56,7 +57,11 @@ const processContentFiles = () => {
                 // process each item in the array and generate page per language
                 contents.forEach( (page) => processPage(page) );
             }
-        );
+        )
+        .catch( (error) => {
+            winston.log(" ERROR ", error);
+            throw error;
+        });
 };
 
 /**
@@ -91,6 +96,7 @@ const processPage = (pageInfo) => {
                 .catch(
                     (err) => {
                         winston.log('error', 'error while saving file', err);
+                        throw err;
                     }
                 );
         }

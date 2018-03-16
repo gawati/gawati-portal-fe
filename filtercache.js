@@ -19,7 +19,6 @@ function fetchFilter() {
                 console.log(" scheduleJobError ", error);
                 if (error) {
                     winston.log('error', 'error while retrieving filter response', error);
-                    throw error;
                 }
             }
         );
@@ -37,7 +36,6 @@ function fetchRecentDocs() {
             console.log(" scheduleJobError ", error);
             if (error) {
                 winston.log('error', 'error while retrieving filter response', error);
-                throw error;
             }
         }
     );    
@@ -63,7 +61,6 @@ function responseFetch(response, cacheFile) {
                     'error while writing response to ' + cacheFile, 
                     error
                 );
-                throw error;
             }
         }  
     );
@@ -92,7 +89,6 @@ function responseFetchFilter(response) {
                     'error while writing filter response ', 
                     error
                 );
-                throw error;
             }
         }  
     );
@@ -114,7 +110,6 @@ function fetchShortFilterCache() {
                 winston.log('error', 'error while opening file ', error);
             }
             apputils.fsClose(fs, fd);
-            throw error;
             return;
         }
         readFullCacheFileAndProcess();
@@ -143,7 +138,6 @@ function readFullCacheFileAndProcess() {
 function processRouteFilterCache(error, data) {
     if (error) {
       winston.log('error', 'error while reading full filter cache', error);
-      throw error;
       return;
     } else {
         // filter the object
@@ -167,7 +161,6 @@ function processRouteFilterCache(error, data) {
                   'error while writing short filter response ', 
                   error
               );
-              throw error;
           }
         }  
       );
@@ -191,7 +184,6 @@ function fetchSmartFilterCache() {
                 return;
             }
             apputils.fsClose(fs, fd);
-            throw error;
             return;
         }
         readFullCacheFileAndSmartProcess();
@@ -221,7 +213,6 @@ function readFullCacheFileAndSmartProcess() {
 function processRouteSmartFilterCache(error, data) {
     if (error) {
       winston.log('error', 'error while reading smart filter cache', error);
-      throw error;
       return;
     } else {
         // filter the object
@@ -245,7 +236,6 @@ function processRouteSmartFilterCache(error, data) {
                   'error while writing short filter response ', 
                   error
               );
-              throw error;
           }
         }  
       );

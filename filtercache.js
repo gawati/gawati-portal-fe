@@ -16,9 +16,9 @@ function fetchFilter() {
         .then(responseFetchFilter)
         .catch(
             function scheduleJobError(error) {
-                console.log(" scheduleJobError ", error);
+                console.log(" fetchFilter.scheduleJobError ", error);
                 if (error) {
-                    winston.log('error', 'error while retrieving filter response', error);
+                    winston.log('error', 'fetchFilter.scheduleJobError error while retrieving filter response', error);
                 }
             }
         );
@@ -35,7 +35,7 @@ function fetchRecentDocs() {
         function scheduleJobError(error) {
             console.log(" scheduleJobError ", error);
             if (error) {
-                winston.log('error', 'error while retrieving filter response', error);
+                winston.log('error', 'fetchRecentDocs error while retrieving filter response', error);
             }
         }
     );    
@@ -58,7 +58,7 @@ function responseFetch(response, cacheFile) {
             if (error) {
                 winston.log(
                     'error', 
-                    'error while writing response to ' + cacheFile, 
+                    'responseFetch error while writing response to ' + cacheFile, 
                     error
                 );
             }
@@ -86,7 +86,7 @@ function responseFetchFilter(response) {
             if (error) {
                 winston.log(
                     'error', 
-                    'error while writing filter response ', 
+                    'responseFetchFilter error while writing filter response ', 
                     error
                 );
             }
@@ -95,27 +95,6 @@ function responseFetchFilter(response) {
     console.log(" success: created full filter cache"); 
 }
 
-
-
-/**
- * Reads the full cache and generates a short-cache file
- */
-function fetchShortFilterCache() {
-    // read the cache file
-    fs.open(getCacheFile(), 'r', (error, fd) => {
-        if (error) {
-            if (error.code === 'ENOENT') {
-                winston.log('error', 'file does not exist', error);
-            } else {
-                winston.log('error', 'error while opening file ', error);
-            }
-            apputils.fsClose(fs, fd);
-            return;
-        }
-        readFullCacheFileAndProcess();
-        apputils.fsClose(fs, fd);
-    });
-}
 
 /**
  * Called by fetchShortFilterCache; Reads the full cache file and sends
@@ -137,11 +116,15 @@ function readFullCacheFileAndProcess() {
  */
 function processRouteFilterCache(error, data) {
     if (error) {
-      winston.log('error', 'error while reading full filter cache', error);
+      winston.log('error', 'processRouteFilterCache error while reading full filter cache', error);
       return;
     } else {
         // filter the object
-      var filterObj = JSON.parse(data);
+      var filterObj = apputils.validateJSON(data);
+      if (filterObj === null) {
+          winston.log("error", "processRouteFilterCache possibly an error condition, the filter cache was not a valid json file, exiting gracefully");
+          return;
+      }
       let shortFilter = {
           'timestamp': filterObj.timestamp, 
           'filter': filterObj.filter.map(
@@ -158,7 +141,7 @@ function processRouteFilterCache(error, data) {
           if (error) {
               winston.log(
                   'error', 
-                  'error while writing short filter response ', 
+                  'processRouteFilterCache error while writing short filter response ', 
                   error
               );
           }
@@ -174,20 +157,19 @@ function processRouteFilterCache(error, data) {
  */
 function fetchSmartFilterCache() {
     // read the cache file
-    fs.open(getCacheFile(), 'r', (error, fd) => {
-        if (error) {
-            if (error.code === 'ENOENT') {
-                winston.log('error', 'file does not exist', error);
-                return;
-            } else {
-                winston.log('error', 'error while opening file ', error);
-                return;
-            }
-            apputils.fsClose(fs, fd);
+    fs.stat(getCacheFile(), (error, fd) => {
+        if (error == null) {
+            readFullCacheFileAndSmartProcess();
+        } else
+        if (error.code === 'ENOENT') {
+            winston.log('info', 'fetchSmartFilterCache file does not exist yet', error);
+            return;
+        } else {
+            winston.log('error', 'fetchSmartFilterCache error while opening file ', error);
             return;
         }
-        readFullCacheFileAndSmartProcess();
-        apputils.fsClose(fs, fd);
+        // not clear from the documentation, but fs.readFile() does not require closing the file handle apparently
+        ///apputils.fsClose(fs, fd);
     });
 }
 
@@ -212,11 +194,15 @@ function readFullCacheFileAndSmartProcess() {
  */
 function processRouteSmartFilterCache(error, data) {
     if (error) {
-      winston.log('error', 'error while reading smart filter cache', error);
+      winston.log('error', 'processRouteSmartFilterCache error while reading smart filter cache', error);
       return;
     } else {
         // filter the object
-      var filterObj = JSON.parse(data);
+      var filterObj = apputils.validateJSON(data);
+      if (filterObj === null) {
+          winston.log("error", "processRouteSmartFilterCache the full cache filter JSON was null, possibly an error condition, exiting gracefully");
+          return;
+      }
       let shortFilter = {
           'timestamp': filterObj.timestamp, 
           'filter': filterObj.filter.map(
@@ -233,7 +219,7 @@ function processRouteSmartFilterCache(error, data) {
           if (error) {
               winston.log(
                   'error', 
-                  'error while writing short filter response ', 
+                  'processRouteSmartFilterCache error while writing short filter response ', 
                   error
               );
           }
@@ -325,6 +311,5 @@ module.exports.getCacheFile = getCacheFile;
 module.exports.getShortCacheFile = getShortCacheFile;
 module.exports.fetchFilter = fetchFilter;
 //module.exports.getFilterResponseAndWriteIt = getFilterResponseAndWriteIt;
-module.exports.fetchShortFilterCache = fetchShortFilterCache;
 module.exports.fetchSmartFilterCache = fetchSmartFilterCache;
 module.exports.fetchRecentDocs = fetchRecentDocs;

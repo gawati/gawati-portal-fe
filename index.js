@@ -40,15 +40,6 @@ app.use(
     )
 );
 
-app.use(
-    '/gwp/short-filter-cache', 
-    express.static(
-        path.join(
-            appconstants.FOLDER_CACHE, 
-            appconstants.FILE_SHORT_FILTER_CACHE
-        )
-    )
-);
 
 app.use(
     '/gwp/smart-filter-cache', 

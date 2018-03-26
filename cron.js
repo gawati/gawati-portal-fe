@@ -36,21 +36,6 @@ var filterCacheCron = schedule.scheduleJob(
 );
 
 /*
-* Run every 8 minutes
-*/
-const CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE =  '*/8 * * * *' ; 
-
-/**
- * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
- * This is a server side request
- */
-var shortenFilterCacheCron = schedule.scheduleJob(
-    CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE,
-    filtercache.fetchShortFilterCache
-);
-
-
-/*
 * Run every 1 minute
 */
 const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/1 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
@@ -81,12 +66,12 @@ cmscontent.processContentFiles();
 * Run every 3 minutes
 */
 
-const  CRON_RECENT_DOCS_CRON_SIGNATURE = '*/3 * * * *';
+// const  CRON_RECENT_DOCS_CRON_SIGNATURE = '*/3 * * * *';
 
-var recentDocsCron = schedule.scheduleJob(
-    CRON_RECENT_DOCS_CRON_SIGNATURE,
-    filtercache.fetchRecentDocs
-);
+// var recentDocsCron = schedule.scheduleJob(
+//     CRON_RECENT_DOCS_CRON_SIGNATURE,
+//     filtercache.fetchRecentDocs
+// );
 
-filtercache.fetchRecentDocs();
+// filtercache.fetchRecentDocs();
 

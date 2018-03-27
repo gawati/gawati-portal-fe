@@ -23,8 +23,18 @@ function fsClose(fs, fd) {
     });
 }
 
+function validateJSON(jsonContent) {
+    try {
+        var data = JSON.parse(jsonContent);
+        return data;
+    } catch (e) {
+        return null;
+    }
+}
+
 
 module.exports = {
     randomNItemsFromArray: randomNItemsFromArray,
-    fsClose: fsClose
+    fsClose: fsClose,
+    validateJSON: validateJSON
 };

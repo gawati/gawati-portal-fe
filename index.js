@@ -40,15 +40,6 @@ app.use(
     )
 );
 
-app.use(
-    '/gwp/short-filter-cache', 
-    express.static(
-        path.join(
-            appconstants.FOLDER_CACHE, 
-            appconstants.FILE_SHORT_FILTER_CACHE
-        )
-    )
-);
 
 app.use(
     '/gwp/smart-filter-cache', 
@@ -56,6 +47,16 @@ app.use(
         path.join(
             appconstants.FOLDER_CACHE, 
             appconstants.FILE_SMART_FILTER_CACHE
+        )
+    )
+);
+
+app.use(
+    '/gwp/recent-docs', 
+    express.static(
+        path.join(
+            appconstants.FOLDER_CACHE, 
+            appconstants.FILE_RECENT_CACHE
         )
     )
 );

@@ -3,6 +3,7 @@ const read = require('node-readability');
 const winston = require('winston');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
+const uiLangs = require('./configs/uiLangs.json');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
@@ -26,10 +27,26 @@ const getContentOutputFile = (pageName, lang) => path.join(
         `${pageName}_${lang}.html`
     );
 
-const getErrorFile = (pageName, lang) => path.join(
-        appconstants.CONTENT_CACHE, "error",
-        `${pageName}_${lang}.html`
-);
+const getErrorFile = (lang) => {
+    var langCode = lang.split("_");
+    var availableLangs = uiLangs.uiLanguages; 
+    // check if the current language language is there in the list 
+    // of ui languages otherwise return english
+    if (availableLangs.indexOf(langCode[0]) >  -1) {
+        return
+        path.join(
+            appconstants.CONTENT_CACHE, "error",
+            `_error_${langCode[0]}.html`
+        );
+    } else {
+        return
+        path.join(
+            appconstants.CONTENT_CACHE, "error",
+            "_error_en.html"
+        );        
+    }
+ }
+ ;
 
 /**
  * Reads pages.json and generates static content for each of the listed content pages
@@ -123,7 +140,7 @@ const pageCleanup = (pageHtml) => {
  * @param {string} lang 
  */
 function serveFile(req, res, next, page, lang) {
-    let cmsPage = page.startsWith('_error') ? getErrorFile(page, lang) : getContentOutputFile(page, lang);
+    let cmsPage = page.startsWith('_error') ? getErrorFile(lang) : getContentOutputFile(page, lang);
     fs.readFileAsync(cmsPage, 'utf8')
         .then(
             (content) => {
@@ -136,8 +153,10 @@ function serveFile(req, res, next, page, lang) {
             (err) => {
                 winston.log('error', "error while serving file " + page, err );
                 let errLang = lang || "en" ;
-                console.log(" ERR LANG ", errLang);
-                serveFile(req, res, next, '_error', errLang);
+                // prevent infinite loops
+                if (!page.startsWith('_error')) {
+                    serveFile(req, res, next, '_error', errLang);
+                }
             }
         );
 }

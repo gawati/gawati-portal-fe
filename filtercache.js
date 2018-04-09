@@ -245,13 +245,16 @@ function remapKeyWords(filterValue) {
     const KW = 'keyword';
     const KW_THRESHOLD = 50; 
     var filterMap = pick(filterValue, ['name', 'label']);
-    if (filterValue[KW].length <= KW_THRESHOLD) {
-        filterMap[KW] = filterValue[KW];
-    } else {
-        filterMap[KW] = apputils.randomNItemsFromArray(
-            filterValue[KW], 
-            KW_THRESHOLD
-        );
+    if(!apputils.objectIsEmpty(filterMap)) {
+        if (filterValue[KW].length <= KW_THRESHOLD) {
+            filterMap[KW] = filterValue[KW];
+        } else {
+            filterMap[KW] = apputils.randomNItemsFromArray(
+                filterValue[KW], 
+                KW_THRESHOLD
+            );
+        }
+   
     }
     return filterMap;
 }

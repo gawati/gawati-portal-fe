@@ -32,9 +32,14 @@ function validateJSON(jsonContent) {
     }
 }
 
+function objectIsEmpty(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object ;
+}
+
 
 module.exports = {
     randomNItemsFromArray: randomNItemsFromArray,
     fsClose: fsClose,
+    objectIsEmpty: objectIsEmpty,
     validateJSON: validateJSON
 };

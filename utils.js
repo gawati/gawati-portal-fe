@@ -1,10 +1,21 @@
-const winston = require('winston');
+const logr = require("./logging.js");
+const appconstants = require("./constants.js");
 
 function randomNItemsFromArray(array, n) {
-    var shuffled = array.sort(function(){return .5 - Math.random()});
+    var shuffled = array.sort(function(){return .5 - Math.random();});
     var selected=shuffled.slice(0,n);
     return selected ;
 }
+
+function serverMsg(message) {
+    return `${appconstants.PROCESS_NAME_PORTAL_SERVER}: ${message}`;
+}
+
+
+function cronMsg(message) {
+    return `${appconstants.PROCESS_NAME_PORTAL_SERVER_CRON}: ${message}`;
+}
+
 
 
 /**
@@ -15,10 +26,10 @@ function randomNItemsFromArray(array, n) {
 function fsClose(fs, fd) {
     fs.close(fd, function(error) {
         if (error) {
-            winston.log('error', 'closing error ' + error.message);
+            logr.error(serverMsg("closing error " + error.message), error);
             return;
         } else {
-            winston.log('File was closed !');
+            logr.debug("File was closed");
         }
     });
 }
@@ -37,9 +48,12 @@ function objectIsEmpty(obj) {
 }
 
 
+
 module.exports = {
     randomNItemsFromArray: randomNItemsFromArray,
     fsClose: fsClose,
     objectIsEmpty: objectIsEmpty,
-    validateJSON: validateJSON
+    validateJSON: validateJSON,
+    serverMsg: serverMsg,
+    cronMsg: cronMsg
 };

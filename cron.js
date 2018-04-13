@@ -7,24 +7,19 @@
  * 
  * or with the main service by passing WITH_CRON=1 as a environment prefix
  */
-const schedule = require('node-schedule');
-const path = require('path');
-const axios = require('axios');
-const fs = require('fs');
-const winston = require('winston');
+const schedule = require("node-schedule");
+const filtercache = require("./filtercache.js");
+const cmscontent = require("./cmscontent.js");
 
 
-const filtercache = require('./filtercache');
-const cmscontent = require('./cmscontent');
+const NODE_ENV = process.env.NODE_ENV || "production";
 
-/**
- * Log level
- */
-winston.level = process.env.LOG_LEVEL || 'error' ;
+console.log(`Starting in ${NODE_ENV} mode`);
+
 /**
  *  Run every 7 minutes
  */
-const CRON_FILTER_CACHE_CRON_SIGNATURE =   '*/7 * * * *'; 
+const CRON_FILTER_CACHE_CRON_SIGNATURE =  NODE_ENV === "development" ? "*/1 * * * *" : "*/7 * * * *"; 
 
 /**
  * Runs a cron job to retreive the filter from the Data server as per CRON_FILTER_CACHE_CRON_SIGNATURE
@@ -34,11 +29,10 @@ var filterCacheCron = schedule.scheduleJob(
     CRON_FILTER_CACHE_CRON_SIGNATURE,
     filtercache.fetchFilter
 );
-
 /*
 * Run every 1 minute
 */
-const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  '*/1 * * * *' ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
+const CRON_SMART_FILTER_CACHE_CRON_SIGNATURE =  "*/1 * * * *" ; // '*/5 * * * *'; // every 5 minutes  //'10 * * * * *' ;
 
 /**
  * Runs a cron job to retreive the schedule as per CRON_SHORTEN_FILTER_CACHE_CRON_SIGNATURE
@@ -53,7 +47,7 @@ var smartFilterCacheCron = schedule.scheduleJob(
 * Run every 12 hours
 */
 
-const CRON_CONTENT_PAGE_CRON_SIGNATURE = '0 0 12 * * *';
+const CRON_CONTENT_PAGE_CRON_SIGNATURE = "0 0 12 * * *";
 
 var cmsCacheCron = schedule.scheduleJob(
     CRON_CONTENT_PAGE_CRON_SIGNATURE,

@@ -1,10 +1,11 @@
-const path = require('path');
-const fs = require('fs');
-const winston = require('winston');
-const pick = require('lodash.pick');
-const axios = require('axios');
-const apputils = require('./utils');
-const appconstants = require('./constants');
+/*jslint es6 */
+const path = require("path");
+const fs = require("fs");
+const pick = require("lodash.pick");
+const axios = require("axios");
+const apputils = require("./utils.js");
+const logr = require("./logging.js");
+const appconstants = require("./constants.js");
 
 /**
  * Queries the service for the filter cache api.
@@ -16,9 +17,11 @@ function fetchFilter() {
         .then(responseFetchFilter)
         .catch(
             function scheduleJobError(error) {
-                console.log(" fetchFilter.scheduleJobError ", error);
                 if (error) {
-                    winston.log('error', 'fetchFilter.scheduleJobError error while retrieving filter response', error);
+                    logr.error(
+                        apputils.cronMsg("fetchFilter.scheduleJobError error while retrieving filter response"), 
+                        error
+                    );
                 }
             }
         );
@@ -26,19 +29,17 @@ function fetchFilter() {
 
 function fetchRecentDocs() {
     axios.get(appconstants.API_RECENT)
-    // call responseFetchFilter()
-    .then(
-        (response) => {
-            return responseFetch(response, getRecentCache());
-    })
-    .catch(
-        function scheduleJobError(error) {
-            console.log(" scheduleJobError ", error);
-            if (error) {
-                winston.log('error', 'fetchRecentDocs error while retrieving filter response', error);
+        .then(
+            (response) => {
+                return responseFetch(response, getRecentCache());
+            })
+        .catch(
+            function scheduleJobError(error) {
+                if (error) {
+                    logr.error( apputils.cronMsg("fetchRecentDocs error while retrieving filter response"), error);
+                }
             }
-        }
-    );    
+        );    
 }
 
 /**
@@ -49,22 +50,20 @@ function fetchRecentDocs() {
  */
 function responseFetch(response, cacheFile) {
     let responseData = response.data; 
-    console.log(" responseFetchRecent ");
     fs.writeFile(
         cacheFile, 
         JSON.stringify(responseData), 
-        'utf8',
+        "utf8",
         function writeFileError(error) {
             if (error) {
-                winston.log(
-                    'error', 
-                    'responseFetch error while writing response to ' + cacheFile, 
+                logr.error(
+                    apputils.cronMsg("responseFetch error while writing response to " + cacheFile), 
                     error
                 );
             }
         }  
     );
-    console.log(" success: created cache " + cacheFile); 
+    logr.info( apputils.cronMsg("success: created cache " + cacheFile)); 
 }
 
 
@@ -77,22 +76,20 @@ function responseFetch(response, cacheFile) {
  */
 function responseFetchFilter(response) {
     let filterData = response.data; 
-    console.log(" responseGetFilter ");
     fs.writeFile(
         getCacheFile(), 
         JSON.stringify(filterData), 
-        'utf8',
+        "utf8",
         function writeFileError(error) {
             if (error) {
-                winston.log(
-                    'error', 
-                    'responseFetchFilter error while writing filter response ', 
+                logr.error(
+                    apputils.cronMsg("responseFetchFilter error while writing filter response "), 
                     error
                 );
             }
         }  
     );
-    console.log(" success: created full filter cache"); 
+    logr.info(apputils.cronMsg(": success: created full filter cache ")); 
 }
 
 
@@ -100,72 +97,82 @@ function responseFetchFilter(response) {
  * Called by fetchShortFilterCache; Reads the full cache file and sends
  * the data for further processing
  */
+/*
 function readFullCacheFileAndProcess() {
     fs.readFile(
         getCacheFile(), 
-        'utf8', 
+        "utf8", 
         processRouteFilterCache
     );
 
 }
+*/
 
 /**
  * Generates the Short Filter Cache file
  * @param {*} error 
  * @param {*} data 
  */
+/*
 function processRouteFilterCache(error, data) {
     if (error) {
-      winston.log('error', 'processRouteFilterCache error while reading full filter cache', error);
-      return;
+        logr.error(apputils.cronMsg("processRouteFilterCache error while reading full filter cache"), error);
+        return;
     } else {
         // filter the object
-      var filterObj = apputils.validateJSON(data);
-      if (filterObj === null) {
-          winston.log("error", "processRouteFilterCache possibly an error condition, the filter cache was not a valid json file, exiting gracefully");
-          return;
-      }
-      let shortFilter = {
-          'timestamp': filterObj.timestamp, 
-          'filter': filterObj.filter.map(
-              // call filterByName to filter the array by name
-              filterByName
+        var filterObj = apputils.validateJSON(data);
+        if (filterObj === null) {
+            logr.error(
+                apputils.cronMsg("processRouteFilterCache possibly an error condition, the filter cache was not a valid json file, exiting gracefully")
+            );
+            return;
+        }
+        let shortFilter = {
+            "timestamp": filterObj.timestamp, 
+            "filter": filterObj.filter.map(
+                // call filterByName to filter the array by name
+                filterByName
             )
-       };
-      // write the shortened object to file
-      fs.writeFile(
-        getShortCacheFile(), 
-        JSON.stringify(shortFilter), 
-        'utf8',
-        function writeFileError(error) {
-          if (error) {
-              winston.log(
-                  'error', 
-                  'processRouteFilterCache error while writing short filter response ', 
-                  error
-              );
-          }
-        }  
-      );
-      console.log(" success: created short filter cache");
+        };
+        // write the shortened object to file
+        fs.writeFile(
+            getShortCacheFile(), 
+            JSON.stringify(shortFilter), 
+            "utf8",
+            function writeFileError(error) {
+                if (error) {
+                    logr.error(
+                        apputils.cronMsg("processRouteFilterCache error while writing short filter response "),
+                        error
+                    );
+                }
+            }  
+        );
+        logr.info(apputils.cronMsg(" success: created short filter cache"));
     }
 }
-
+*/
 
 /**
  * Reads the full cache and generates a short-cache file
  */
 function fetchSmartFilterCache() {
     // read the cache file
-    fs.stat(getCacheFile(), (error, fd) => {
+    fs.stat(getCacheFile(), (error) => {
         if (error == null) {
             readFullCacheFileAndSmartProcess();
         } else
-        if (error.code === 'ENOENT') {
-            winston.log('info', 'fetchSmartFilterCache file does not exist yet', error);
+        if (error.code === "ENOENT") {
+            logr.info(
+                apputils.cronMsg("fetchSmartFilterCache file does not exist yet"), 
+                error
+            );
             return;
         } else {
-            winston.log('error', 'fetchSmartFilterCache error while opening file ', error);
+            logr.error(
+                apputils.cronMsg("fetchSmartFilterCache error while opening file "), 
+                error
+            );
             return;
         }
         // not clear from the documentation, but fs.readFile() does not require closing the file handle apparently
@@ -180,7 +187,7 @@ function fetchSmartFilterCache() {
 function readFullCacheFileAndSmartProcess() {
     fs.readFile(
         getCacheFile(), 
-        'utf8', 
+        "utf8", 
         processRouteSmartFilterCache
     );
 
@@ -194,57 +201,60 @@ function readFullCacheFileAndSmartProcess() {
  */
 function processRouteSmartFilterCache(error, data) {
     if (error) {
-      winston.log('error', 'processRouteSmartFilterCache error while reading smart filter cache', error);
-      return;
+        logr.error(
+            apputils.cronMsg("processRouteSmartFilterCache error while reading smart filter cache"), 
+            error
+        );
+        return;
     } else {
         // filter the object
-      var filterObj = apputils.validateJSON(data);
-      if (filterObj === null) {
-          winston.log("error", "processRouteSmartFilterCache the full cache filter JSON was null, possibly an error condition, exiting gracefully");
-          return;
-      }
-      let shortFilter = {
-          'timestamp': filterObj.timestamp, 
-          'filter': filterObj.filter.map(
-              // call filterByName to filter the array by name
-              smartFilterByName
+        var filterObj = apputils.validateJSON(data);
+        if (filterObj === null) {
+            logr.info(
+                apputils.cronMsg("processRouteSmartFilterCache the full cache filter JSON was null, possibly an error condition, exiting gracefully")
+            );
+            return;
+        }
+        let shortFilter = {
+            "timestamp": filterObj.timestamp, 
+            "filter": filterObj.filter.map(
+                // call filterByName to filter the array by name
+                smartFilterByName
             )
-       };
-      // write the shortened object to file
-      fs.writeFile(
-        getSmartCacheFile(), 
-        JSON.stringify(shortFilter), 
-        'utf8',
-        function writeFileError(error) {
-          if (error) {
-              winston.log(
-                  'error', 
-                  'processRouteSmartFilterCache error while writing short filter response ', 
-                  error
-              );
-          }
-        }  
-      );
-      console.log(" success: created smart filter cache");
+        };
+        // write the shortened object to file
+        fs.writeFile(
+            getSmartCacheFile(), 
+            JSON.stringify(shortFilter), 
+            "utf8",
+            function writeFileError(error) {
+                if (error) {
+                    logr.error(
+                        apputils.cronMsg(
+                            "processRouteSmartFilterCache error while writing short filter response "
+                        ), 
+                        error
+                    );
+                }
+            }  
+        );
+        logr.info(apputils.cronMsg("success: created smart filter cache"));
     }
 }
 
 function smartFilterByName(filterValue) {
-    let size =  5;
     switch(filterValue.name) {
-      case "keywords":
-          return remapKeyWords(filterValue);
-        break;
-      default:
-          return filterValue;
-        break;
+    case "keywords":
+        return remapKeyWords(filterValue);
+    default:
+        return filterValue;
     }
-  }
+}
 
 function remapKeyWords(filterValue) {
-    const KW = 'keyword';
+    const KW = "keyword";
     const KW_THRESHOLD = 50; 
-    var filterMap = pick(filterValue, ['name', 'label']);
+    var filterMap = pick(filterValue, ["name", "label"]);
     if(!apputils.objectIsEmpty(filterMap)) {
         if (filterValue[KW].length <= KW_THRESHOLD) {
             filterMap[KW] = filterValue[KW];
@@ -260,33 +270,29 @@ function remapKeyWords(filterValue) {
 }
   
 
-
+/*
 function remapFilter(value, key, size) {
-    var filterMap = pick(value, ['name', 'label']);
+    var filterMap = pick(value, ["name", "label"]);
     filterMap[key] = value[key].slice(0, size);
     return filterMap;
-  }
+}
+*/
 
-
-
+/* 
 function filterByName(filterValue) {
     let size =  5;
     switch(filterValue.name) {
-      case "countries":
-          return remapFilter(filterValue, 'country', size);
-        break;
-      case "langs":
-          return remapFilter(filterValue, 'lang', size);
-        break;
-      case "years":
-          return remapFilter(filterValue, 'year', size);
-        break;
-      case "keywords":
-          return remapFilter(filterValue, 'keyword', size);
-        break;
+    case "countries":
+        return remapFilter(filterValue, "country", size);
+    case "langs":
+        return remapFilter(filterValue, "lang", size);
+    case "years":
+        return remapFilter(filterValue, "year", size);
+    case "keywords":
+        return remapFilter(filterValue, "keyword", size);
     }
-  }
-  
+}
+ */  
   
 
 /**

@@ -1,0 +1,1 @@
+& {$pre = $env:NODE_ENV; $env:NODE_ENV = 'development'; node .\cron.js ; if ($pre) {$env:NODE_ENV = $pre} else {Remove-Item env:\NODE_ENV} }

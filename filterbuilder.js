@@ -1,6 +1,5 @@
-const winston = require('winston');
-const axios = require('axios');
-const appconstants = require('./constants');
+const axios = require("axios");
+const appconstants = require("./constants");
 
 /**
  * Specifies the filter configuration
@@ -25,35 +24,37 @@ const appconstants = require('./constants');
  *    
  */
 const filterConfig = {
-    'countries': {
-      xqueryElementXPath: './/an:FRBRcountry',
-      xqueryAttr: '@value'
+    "countries": {
+        xqueryElementXPath: ".//an:FRBRcountry",
+        xqueryAttr: "@value"
     },
-    'langs': {
-      xqueryElementXPath: './/an:FRBRlanguage',
-      xqueryAttr: '@language'
+    "langs": {
+        xqueryElementXPath: ".//an:FRBRlanguage",
+        xqueryAttr: "@language"
     }
 };
 
 const convertEncodedStringToObject = (aString) =>
     JSON.parse(decodeURIComponent(aString)) ;
 
-const convertObjectToEncodedString = (obj) =>
+/*
+    const convertObjectToEncodedString = (obj) =>
     encodeURIComponent(JSON.stringify(obj)) ;
+*/
 
-function searchFilter(req, res, next) {
+const searchFilter = (req) => {
     console.log(" searchFilter req.query ", req.query);
     let filter = convertEncodedStringToObject(req.query.q);
     let count = 1; // req.query.count || "10" ; 
     let from = 1 ; //req.query.from || "1" ;
-    let xQueryFilter = xQueryFilterBuilder(filter).join('');
+    let xQueryFilter = xQueryFilterBuilder(filter).join("");
     let filterObj = {
-      count: count, 
-      from: from, 
-      q: xQueryFilter
+        count: count, 
+        from: from, 
+        q: xQueryFilter
     };
     return filterObj;
-}
+};
   
 
 
@@ -61,14 +62,14 @@ function searchFilter(req, res, next) {
  * Queries the service for the filter cache api.
  * This is called by the CRON service
  */
-async function searchFilterQuery(filterObj) {
+const searchFilterQuery = (filterObj) => {
     console.log(" FILTER OBJ ", filterObj);
     return axios.get(appconstants.API_SEARCH_FILTER, filterObj).then(
         (response) => {
             return response.data;
         }
     );
-}
+};
 
 
 

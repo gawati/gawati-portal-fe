@@ -20,5 +20,8 @@
     "node-readability": "^3.0.0",
     "node-schedule": "^1.3.0",
     "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "jslint": "^0.12.0"
   }
 }

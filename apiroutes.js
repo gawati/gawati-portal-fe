@@ -9,6 +9,7 @@ const Fuse = require('fuse.js');
 const apputils = require('./utils');
 const filtercache = require('./filtercache');
 const cmscontent = require('./cmscontent');
+const packageJSON = require('./package.json');
 
 const fs = Promise.promisifyAll(require('fs'));
 
@@ -28,18 +29,19 @@ const asyncUtil = fn =>
           fn(req, res, next)
             .catch(next);
  
-            /*
-router.get(
-  '/searchFilter',
-  asyncUtil( async (req, res, next) => {
-    const filterObj = filterbuilder.searchFilter(req, res, next);
-    const data = await filterbuilder.searchFilterQuery(filterObj);
-    res.json(data)
-  }
-  )
-);
 
+/*
+Shows keep alive status
 */
+router.get(
+  '/about',
+  (req, res, next) => {
+    const pkgName = packageJSON.name ; 
+    const pkgVersion = packageJSON.version;
+    const aboutInfo = `package=${pkgName};version=${pkgVersion};date=` ;
+    res.status(200).send(aboutInfo);
+  }
+)
 
 router.get(
   '/content',

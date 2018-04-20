@@ -255,16 +255,21 @@ function remapKeyWords(filterValue) {
     const KW = "keyword";
     const KW_THRESHOLD = 50; 
     var filterMap = pick(filterValue, ["name", "label"]);
-    if(!apputils.objectIsEmpty(filterMap)) {
-        if (filterValue[KW].length <= KW_THRESHOLD) {
-            filterMap[KW] = filterValue[KW];
-        } else {
-            filterMap[KW] = apputils.randomNItemsFromArray(
-                filterValue[KW], 
-                KW_THRESHOLD
-            );
+    try {
+        if(!apputils.objectIsEmpty(filterValue)) {
+            if (filterValue.hasOwnProperty(KW)) {
+                if (filterValue[KW].length <= KW_THRESHOLD) {
+                    filterMap[KW] = filterValue[KW];
+                } else {
+                    filterMap[KW] = apputils.randomNItemsFromArray(
+                        filterValue[KW], 
+                        KW_THRESHOLD
+                    );
+                }
+            }
         }
-   
+    } catch (error) {
+        logr.error("Exception in remapKeywords ", error);
     }
     return filterMap;
 }

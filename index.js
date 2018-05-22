@@ -62,6 +62,16 @@ app.use(
 );
 
 app.use(
+    "/gwp/profile.json",
+    express.static(
+        path.join(
+            appconstants.CONFIG_FOLDER,
+            appconstants.PROFILE_JSON
+        )
+    )
+);
+
+app.use(
     '/gwp/recent-docs', 
     express.static(
         path.join(

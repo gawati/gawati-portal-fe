@@ -1,16 +1,6 @@
 pipeline {
     agent any
 
-//  define {
-//      def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
-//      def STATUS_MAP = ['SUCCESS': 'success', 'FAILURE': 'failed', 'UNSTABLE': 'failed', 'ABORTED': 'failed']
-//  }
-
-    environment {
-        // CI="false"
-        PKF="portal-server"
-    }
-
     tools {nodejs "nodejs-lts"}
 
     stages {
@@ -48,7 +38,6 @@ PkgLinkLatest
 
     post {
         always {
-//          slackSend (color: COLOR_MAP[currentBuild.currentResult], message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             slackSend (message: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
         failure {

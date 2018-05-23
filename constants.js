@@ -15,6 +15,7 @@ const FILE_FILTER_CACHE = "full-filter-cache.json" ;
 const FILE_SHORT_FILTER_CACHE = "short-filter-cache.json";
 const FILE_SMART_FILTER_CACHE = "smart-filter-cache.json";
 const FILE_RECENT_CACHE = "recent-docs.json";
+const AUTH_JSON = "auth.json";
 
 const API_SERVER_BASE = () =>
     API_PROTOCOL + "://" + API_HOST + ":" + API_PORT + "/exist/restxq";
@@ -35,6 +36,7 @@ module.exports = {
     FILE_SHORT_FILTER_CACHE: FILE_SHORT_FILTER_CACHE,
     FILE_SMART_FILTER_CACHE: FILE_SMART_FILTER_CACHE,
     FILE_RECENT_CACHE: FILE_RECENT_CACHE,
+    AUTH_JSON: AUTH_JSON,
     API_FILTER_CACHE: API_FILTER_CACHE,
     API_SEARCH_FILTER: API_SEARCH_FILTER,
     API_RECENT: API_RECENT,

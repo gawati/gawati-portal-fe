@@ -52,6 +52,16 @@ app.use(
 );
 
 app.use(
+    "/gwp/auth.json",
+    express.static(
+        path.join(
+            appconstants.CONFIG_FOLDER,
+            appconstants.AUTH_JSON
+        )
+    )
+);
+
+app.use(
     '/gwp/recent-docs', 
     express.static(
         path.join(
@@ -61,6 +71,7 @@ app.use(
     )
 );
 
+console.log(" Services Started... ");
 
 app.use( function (err, req, res, next) {
     console.log (" ERROR LOGGED");

@@ -1,0 +1,14 @@
+{
+	"gawati-portal-ui":{
+		"urlBase": "http://13.127.87.207:3000"
+	},
+	"gawati-portal-fe":{
+		"urlBase": "http://13.127.87.207:8080"
+	},
+	"gawati-profiles-ui":{
+		"urlBase": "http://13.127.87.207:9004"
+	},
+	"gawati-profiles-fe":{
+		"urlBase": "http://13.127.87.207:9003"
+	}
+}

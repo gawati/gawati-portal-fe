@@ -62,11 +62,11 @@ app.use(
 );
 
 app.use(
-    "/gwp/profile.json",
+    "/gwp/gawati.json",
     express.static(
         path.join(
             appconstants.CONFIG_FOLDER,
-            appconstants.PROFILE_JSON
+            appconstants.GAWATI_JSON
         )
     )
 );

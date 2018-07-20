@@ -2,6 +2,9 @@ const API_PROTOCOL = process.env.API_PROTOCOL || "http" ;
 const API_HOST = process.env.API_HOST || "localhost" ;
 const API_PORT = process.env.API_PORT || "8080" ;
 
+// const JAVA_API_PROTOCOL = process.env.JAVA_API_PROTOCOL || "http" ;
+// const JAVA_API_HOST = process.env.JAVA_API_HOST || "localhost" ;
+
 /** Folders */
 const CONFIG_FOLDER = "configs" ;
 const FOLDER_CACHE = "portal-cache" ;
@@ -21,12 +24,15 @@ const GAWATI_JSON = "gawati.json";
 const API_SERVER_BASE = () =>
     API_PROTOCOL + "://" + API_HOST + ":" + API_PORT + "/exist/restxq";
 
+// const JAVA_API_SERVER_BASE = () =>
+//     JAVA_API_PROTOCOL + "://" + JAVA_API_HOST ;
 
 const API_FILTER_CACHE =  API_SERVER_BASE() + "/gw/filter-cache/json" ;
 const API_RECENT = API_SERVER_BASE() + "/gw/recent/expressions/summary/json?count=4&from=1&to=4" ;
 const API_SEARCH_FILTER = API_SERVER_BASE() + "/gw/search/filter/json" ;
 const PROCESS_NAME_PORTAL_SERVER = "PORTAL-SERVER";
 const PROCESS_NAME_PORTAL_SERVER_CRON = "PORTAL-CRON";
+const API_DOC = API_SERVER_BASE() + "/gw/doc/json";
 
 module.exports = {
     CONFIG_FOLDER: CONFIG_FOLDER,
@@ -43,5 +49,6 @@ module.exports = {
     API_SEARCH_FILTER: API_SEARCH_FILTER,
     API_RECENT: API_RECENT,
     PROCESS_NAME_PORTAL_SERVER: PROCESS_NAME_PORTAL_SERVER,
-    PROCESS_NAME_PORTAL_SERVER_CRON: PROCESS_NAME_PORTAL_SERVER_CRON
+    PROCESS_NAME_PORTAL_SERVER_CRON: PROCESS_NAME_PORTAL_SERVER_CRON,
+    API_DOC: API_DOC,  
 };

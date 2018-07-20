@@ -16,13 +16,24 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Upload') {
+        stage('Build') {
             steps {
-                sh 'rm -rf .gitignore .git Jenkinsfile'
                 script {
                     sh '''
 wget -qO- http://dl.gawati.org/dev/jenkinslib-latest.tbz | tar -xvjf -
 . ./jenkinslib.sh
+echo -n "${JenkinsJson}" >jenkins.json
+makebuild
+'''
+                }
+            }
+        }
+        stage('Upload') {
+            steps {
+                script {
+                    sh '''
+. ./jenkinslib.sh
+cd build
 PkgPack
 PkgLinkLatest
 '''

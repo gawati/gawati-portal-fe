@@ -1,0 +1,14 @@
+{
+	"gawati-portal-ui":{
+		"urlBase": "http://localhost:3000"
+	},
+	"gawati-portal-fe":{
+		"urlBase": "http://localhost:9001"
+	},
+	"gawati-profiles-ui":{
+		"urlBase": "http://localhost:9004"
+	},
+	"gawati-profiles-fe":{
+		"urlBase": "http://localhost:9003"
+	}
+}

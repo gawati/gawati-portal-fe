@@ -1,20 +1,34 @@
 {
-	"gawati-portal-ui":{
-		"urlBase": "http://localhost:3000"
+	"internal" : {
+		"gawati-portal-ui":{
+			"urlBase": "http://localhost:3000"
+		},
+		"gawati-portal-fe":{
+			"urlBase": "http://localhost:9001"
+		},
+		"gawati-profiles-ui":{
+			"urlBase": "http://localhost:9004"
+		},
+		"gawati-profiles-fe":{
+			"urlBase": "http://localhost:9003"
+		}
+		// "xslt-tranformer":{
+		// 	"urlBase":"http://localhost:9084"
+		// },
+		// "gawati-viewer-service":{
+		// 	"urlBase": "http://localhost:9005"
+		// }
 	},
-	"gawati-portal-fe":{
-		"urlBase": "http://localhost:9001"
-	},
-	"gawati-profiles-ui":{
-		"urlBase": "http://localhost:9004"
-	},
-	"gawati-profiles-fe":{
-		"urlBase": "http://localhost:9003"
-	},
-	"xslt-tranformer":{
-		"urlBase":"http://localhost:9084"
-	},
-	"gawati-viewer-service":{
-		"urlBase": "http://localhost:9005"
+	"client": {
+		"gawati-profiles-ui" : {
+			"urlBase" : "http://localhost:9004"
+		},
+		"gawati-media-server": {
+			"urlBase": "http://media.local"
+		},
+		"gawati-data-server" : {
+			"urlBase": "http://data.local"
+		}
+
 	}
 }

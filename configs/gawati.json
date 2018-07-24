@@ -12,6 +12,12 @@
 		"gawati-profiles-fe":{
 			"urlBase": "http://localhost:9003"
 		}
+		// "xslt-tranformer":{
+		// 	"urlBase":"http://localhost:9084"
+		// },
+		// "gawati-viewer-service":{
+		// 	"urlBase": "http://localhost:9005"
+		// }
 	},
 	"client": {
 		"gawati-profiles-ui" : {
